@@ -8,11 +8,11 @@
 
 #import <UIKit/UIKit.h>
 
-#import "MEAppDelegate.h"
+#import "menuAppDelegate.h"
 
 int main(int argc, char * argv[])
 {
     @autoreleasepool {
-        return UIApplicationMain(argc, argv, nil, NSStringFromClass([MEAppDelegate class]));
+        return UIApplicationMain(argc, argv, nil, NSStringFromClass([menuAppDelegate class]));
     }
 }
