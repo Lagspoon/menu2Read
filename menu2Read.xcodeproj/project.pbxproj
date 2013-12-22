@@ -59,6 +59,7 @@
 		0948CB3C185EFF32002A5998 /* Icone76.png in Resources */ = {isa = PBXBuildFile; fileRef = 0948CB3A185EFF32002A5998 /* Icone76.png */; };
 		0948CB3D185EFF32002A5998 /* Icone152.png in Resources */ = {isa = PBXBuildFile; fileRef = 0948CB3B185EFF32002A5998 /* Icone152.png */; };
 		0948CB46185F1308002A5998 /* SquareMenuAd.m in Sources */ = {isa = PBXBuildFile; fileRef = 0948CB45185F1308002A5998 /* SquareMenuAd.m */; };
+		094B4D4418673B6C00ADC7DF /* DBKAPI.m in Sources */ = {isa = PBXBuildFile; fileRef = 094B4D4318673B6C00ADC7DF /* DBKAPI.m */; };
 		0980D43A1863E0BB00571973 /* bottle.png in Resources */ = {isa = PBXBuildFile; fileRef = 0948CB2F185EFCED002A5998 /* bottle.png */; };
 		0980D43B1863E0BB00571973 /* glass.png in Resources */ = {isa = PBXBuildFile; fileRef = 0948CB30185EFCED002A5998 /* glass.png */; };
 		0994FCFD185FB55400CE62C2 /* MEPopupVideo.m in Sources */ = {isa = PBXBuildFile; fileRef = 0994FCFC185FB55400CE62C2 /* MEPopupVideo.m */; };
@@ -167,6 +168,8 @@
 		0948CB40185F0CC8002A5998 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		0948CB44185F1308002A5998 /* SquareMenuAd.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SquareMenuAd.h; path = ../makeMyMouthWater/makeMyMouthWater/SquareMenuAd.h; sourceTree = "<group>"; };
 		0948CB45185F1308002A5998 /* SquareMenuAd.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SquareMenuAd.m; path = ../makeMyMouthWater/makeMyMouthWater/SquareMenuAd.m; sourceTree = "<group>"; };
+		094B4D4218673B6C00ADC7DF /* DBKAPI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DBKAPI.h; path = ../syncWithAFNetworking/syncWithAFNetworking/DBKAPI.h; sourceTree = "<group>"; };
+		094B4D4318673B6C00ADC7DF /* DBKAPI.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DBKAPI.m; path = ../syncWithAFNetworking/syncWithAFNetworking/DBKAPI.m; sourceTree = "<group>"; };
 		0994FCFB185FB55400CE62C2 /* MEPopupVideo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MEPopupVideo.h; sourceTree = "<group>"; };
 		0994FCFC185FB55400CE62C2 /* MEPopupVideo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MEPopupVideo.m; sourceTree = "<group>"; };
 		0994FCFE185FB5A100CE62C2 /* MEPopup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MEPopup.h; sourceTree = "<group>"; };
@@ -341,6 +344,8 @@
 		0942D320185B4C2B004BA00D /* syncWithAFNetworking */ = {
 			isa = PBXGroup;
 			children = (
+				094B4D4218673B6C00ADC7DF /* DBKAPI.h */,
+				094B4D4318673B6C00ADC7DF /* DBKAPI.m */,
 				0942D280185A60D5004BA00D /* DBCoreDataStack.h */,
 				0942D27E185A60D5004BA00D /* DBCoreDataStack.m */,
 				0942D28B185A60D5004BA00D /* SYHTTPClient.h */,
@@ -563,6 +568,7 @@
 				0942D295185A60D5004BA00D /* SYSyncEngine.m in Sources */,
 				091EA525185A434A00827640 /* menuPageBig.m in Sources */,
 				091EA527185A434A00827640 /* menuPageSmall.m in Sources */,
+				094B4D4418673B6C00ADC7DF /* DBKAPI.m in Sources */,
 				0942D2B6185A6E5E004BA00D /* AFURLConnectionOperation.m in Sources */,
 				0948CB46185F1308002A5998 /* SquareMenuAd.m in Sources */,
 				091EA528185A434A00827640 /* menuSmallPVC.m in Sources */,
