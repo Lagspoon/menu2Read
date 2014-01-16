@@ -14,6 +14,6 @@
 @property (strong, nonatomic) UIPageViewController *pageViewController;
 @property (strong, nonatomic) menuPageModel *modelController;
 
-- (UIPageControl *) pageControlInit;
+//- (UIPageControl *) pageControlInit;
 
 @end

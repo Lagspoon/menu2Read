@@ -18,6 +18,7 @@
 @property (strong, nonatomic) IBOutlet UIImageView *image;
 @property (strong, nonatomic) IBOutlet UIToolbar *toolBar;
 @property (weak, nonatomic) IBOutlet UIImageView *containingPicture;
+
 @end
 
 @implementation menuPageBig

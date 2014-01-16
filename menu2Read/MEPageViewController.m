@@ -26,7 +26,7 @@
 ////////////////////////////////////////////////////////////////////////
 //PAGE CONTROL MANAGEMENT
 ////////////////////////////////////////////////////////////////////////
-
+/*
 - (UIPageControl *) pageControlInit {
 
     UIPageControl * pageControl = [[UIPageControl alloc]init];
@@ -34,7 +34,7 @@
     pageControl.currentPage = [self.modelController presentationIndexForPageViewController:self.pageViewController];
     return pageControl;
 }
-
+*/
 
 ////////////////////////////////////////////////////////////////////////
 //UIPageViewController DELEGATE METHOD

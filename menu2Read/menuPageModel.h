@@ -12,6 +12,8 @@
 - (UIViewController *)viewControllerAtIndex:(NSUInteger)index;
 - (NSUInteger)indexOfViewController:(UIViewController *)viewController;
 - (menuPageModel *) initWithDataForPages :(NSMutableArray*) dataForPages;
+
 @property (strong, nonatomic) NSMutableArray *dataForPages; //mutableArray of Dictionary
+@property (nonatomic) NSInteger index;
 
 @end

@@ -13,7 +13,6 @@
 #import "MEPage.h"
 
 @interface menuPageModel()
-@property (nonatomic) NSInteger index;
 
 @end
 

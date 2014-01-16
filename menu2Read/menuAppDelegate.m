@@ -32,7 +32,7 @@
 
         MEAppConductor* appConductor = [[MEAppConductor alloc]init];
         [appConductor register2Sync];
-        [appConductor start2Sync];
+        //[appConductor start2Sync];
     });
 
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -42,6 +42,7 @@
     });
     return YES;
 }
+
 							
 - (void)applicationWillResignActive:(UIApplication *)application
 {

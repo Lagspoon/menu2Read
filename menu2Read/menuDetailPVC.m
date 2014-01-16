@@ -75,8 +75,9 @@
     self.pageViewController.delegate = self;
     self.pageViewController.dataSource = self.modelController;
 
-    if ([self.modelController.dataForPages count]==0)
+    if ([self.modelController.dataForPages count]==0) {
         self.modelController.dataForPages = [NSMutableArray arrayWithObject:@{@"viewControllerId": @"menuWelcome"}];
+    }
     menuPageBig *startingViewController = (menuPageBig *)[self.modelController viewControllerAtIndex:0];
 
     //Crash if startingViewCOntroller is nil : first element of an array cannot be nil

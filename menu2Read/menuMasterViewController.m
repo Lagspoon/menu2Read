@@ -110,40 +110,27 @@ NSString * const kSDSyncEngineSyncCompletedNotificationName1 = @"SDSyncEngineSyn
 
     [self.refreshControl addTarget:self action:@selector(refresh) forControlEvents:UIControlEventValueChanged];
 
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refresh) name:kSDSyncEngineInitialCompleteKey1 object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refresh) name:kSDSyncEngineSyncCompletedNotificationName1 object:nil];
+    //[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refresh) name:kSDSyncEngineInitialCompleteKey1 object:nil];
+    //[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refresh) name:kSDSyncEngineSyncCompletedNotificationName1 object:nil];
 
     NSError *error;
     if (![[self fetchedResultsController] performFetch:&error]) {
-        /*
-         Replace this implementation with code to handle the error appropriately.
-         */
       NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
     }
+}
 
-    switch (self.choiceLevel) {
-        case 1:
+- (void) viewWillAppear:(BOOL)animated {
+    if (self.choiceLevel == 1) {
+        self.categorySelected = nil;
+    }
+    menuDetailPVC *detailPVC = (menuDetailPVC*)self.splitViewController.delegate;
+    detailPVC.modelController.dataForPages = [self createDataForPages];
 
-            break;
-        case 2:
-        {
-            NSMutableArray *mutableArrayOfContainingType = [[NSMutableArray alloc]init];
-            NSString *previousContainingName = nil;
-            for (Drink *drink in [self.fetchedResultsController fetchedObjects]) {
-                if ([drink.containing isEqualToString:previousContainingName]) {
-                    [mutableArrayOfContainingType addObject:drink.containing];
-                }
-                previousContainingName = drink.containing;
-            }
-
-            //with this kind of loop the first object is doubled and the last is not added, thus below we do the correction
-            [mutableArrayOfContainingType addObject:previousContainingName];
-            [mutableArrayOfContainingType removeObjectAtIndex:0];
-            self.containingList = [NSArray arrayWithArray:mutableArrayOfContainingType];//this method is ok but not sorted[[self.fetchedResultsController fetchedObjects] valueForKeyPath:@"@distinctUnionOfObjects.containing"];
-
-        }
-        default:
-            break;
+    if ([detailPVC.modelController.dataForPages count] > 0) {
+        detailPVC.modelController.index = 0;
+        [detailPVC.pageViewController setViewControllers:@[[detailPVC.modelController viewControllerAtIndex:0]] direction:UIPageViewControllerNavigationDirectionReverse animated:NO completion:^(BOOL finished) {
+            NULL;
+        }];
     }
 
 }
@@ -163,9 +150,7 @@ NSString * const kSDSyncEngineSyncCompletedNotificationName1 = @"SDSyncEngineSyn
 {
     NSInteger sectionNb;
     switch (self.choiceLevel) {
-        case 2:
-            sectionNb =1;
-            break;
+
         default:
             sectionNb = [[self.fetchedResultsController sections] count];
             break;
@@ -177,9 +162,7 @@ NSString * const kSDSyncEngineSyncCompletedNotificationName1 = @"SDSyncEngineSyn
 {
     NSInteger sectionNb;
     switch (self.choiceLevel) {
-        case 2:
-            sectionNb = [[self containingList] count];
-            break;
+
         default:
         {
             id <NSFetchedResultsSectionInfo> sectionInfo = [self.fetchedResultsController sections][section];
@@ -203,17 +186,12 @@ NSString * const kSDSyncEngineSyncCompletedNotificationName1 = @"SDSyncEngineSyn
             cell.detailTextLabel.text=@"";
         }
             break;
+
         case 2:
-        {
-            cell.textLabel.text = [self.containingList objectAtIndex:[indexPath indexAtPosition:1]];
-        }
-            break;
-        case 3:
         {
             Drink *drink = (Drink *) self.idSelected;
             cell.textLabel.text = drink.name;
             cell.detailTextLabel.text = [NSString stringWithFormat:@"%@ €",drink.price];
-            //cell.imageCell.image = [UIImage imageWithData:drink.photo];
         }
 
             break;
@@ -227,14 +205,13 @@ NSString * const kSDSyncEngineSyncCompletedNotificationName1 = @"SDSyncEngineSyn
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
     NSString *sectionTitle;
     switch (self.choiceLevel) {
-        case 1:
-            sectionTitle =[[[self.fetchedResultsController sections] objectAtIndex:section] name];
-            break;
+
         case 2:
-            sectionTitle = nil;
+        {
+            NSArray *objectsOfTheSection = [NSArray arrayWithArray:[[[self.fetchedResultsController sections] objectAtIndex:section] objects]];
+            sectionTitle = [[objectsOfTheSection firstObject] valueForKey:@"containing"];
+        }
             break;
-        case 3:
-            //sectionTitle =[[[self.fetchedResultsController sections] objectAtIndex:section] name];
 
         default:
             sectionTitle=nil;
@@ -254,7 +231,7 @@ NSString * const kSDSyncEngineSyncCompletedNotificationName1 = @"SDSyncEngineSyn
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     switch (self.choiceLevel) {
 
-        case 3:
+        case 2:
         {
             NSManagedObject *object = [[self fetchedResultsController] objectAtIndexPath:indexPath];
             if ([object isKindOfClass:[Drink class]]) {
@@ -270,8 +247,9 @@ NSString * const kSDSyncEngineSyncCompletedNotificationName1 = @"SDSyncEngineSyn
                 menuDetailPVC *detailPVC = (menuDetailPVC*)self.splitViewController.delegate;
 
                 NSDictionary *dictionary = [NSDictionary dictionaryWithObjectsAndKeys:drink,@"object", viewControllerId,@"viewControllerId",nil];
-
-                detailPVC.modelController.dataForPages = (NSMutableArray *)@[dictionary];
+                if ([detailPVC.modelController.dataForPages containsObject:dictionary])
+                    [detailPVC.modelController.dataForPages removeObject:dictionary];
+                [detailPVC.modelController.dataForPages insertObject:dictionary atIndex:0];
 
 
             [detailPVC.pageViewController setViewControllers:@[[detailPVC.modelController viewControllerAtIndex:0]] direction:UIPageViewControllerNavigationDirectionReverse animated:NO completion:^(BOOL finished) {
@@ -303,7 +281,7 @@ NSString * const kSDSyncEngineSyncCompletedNotificationName1 = @"SDSyncEngineSyn
     [fetchRequest setEntity:entity];
     
     // Set the batch size to a suitable number.
-    [fetchRequest setFetchBatchSize:20];
+    [fetchRequest setFetchBatchSize:0];
 
     NSString *sectionName;
     NSArray *sortDescriptors;
@@ -313,31 +291,22 @@ NSString * const kSDSyncEngineSyncCompletedNotificationName1 = @"SDSyncEngineSyn
         case 1:
         {
             // Edit the sort key as appropriate
-            NSSortDescriptor *labelDescriptor = [[NSSortDescriptor alloc] initWithKey: @"label" ascending:YES];
+            NSSortDescriptor *labelDescriptor = [[NSSortDescriptor alloc] initWithKey: @"rank" ascending:YES];
             sortDescriptors= @[labelDescriptor];
             sectionName=nil;
         }
             break;
          case 2:
         {
-            predicate = [NSPredicate predicateWithFormat:@"(type = %@)",self.categorySelected.label];
-            NSSortDescriptor *containingDescriptor = [[NSSortDescriptor alloc] initWithKey: @"volume" ascending:YES];
-            sortDescriptors= @[containingDescriptor];
-            sectionName=nil;
-        }
-            break;
-
-
-        case 3:
-        {
-            predicate = [NSPredicate predicateWithFormat:@"(containing = %@) AND (type = %@)",self.containingSelected,self.categorySelected.label];
-
+            predicate = [NSPredicate predicateWithFormat:@"(category = %@)",self.categorySelected.label];
+            NSSortDescriptor *volumeDescriptor = [[NSSortDescriptor alloc] initWithKey: @"volume" ascending:YES];
             NSSortDescriptor *priceDescriptor = [[NSSortDescriptor alloc] initWithKey:@"price" ascending:YES];
             NSSortDescriptor *nameDescriptor = [[NSSortDescriptor alloc] initWithKey:@"name" ascending:YES];
-            sortDescriptors = @[priceDescriptor,nameDescriptor];
 
-            sectionName =@"name";
+            sortDescriptors= @[volumeDescriptor, priceDescriptor, nameDescriptor];
+            sectionName=@"volume";
         }
+            break;
 
         default:
             break;
@@ -346,20 +315,73 @@ NSString * const kSDSyncEngineSyncCompletedNotificationName1 = @"SDSyncEngineSyn
     fetchRequest.predicate = predicate;
     [fetchRequest setSortDescriptors:sortDescriptors];
 
-    NSFetchedResultsController *FRC = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest managedObjectContext:self.dataController.managedObjectContext sectionNameKeyPath:sectionName cacheName:nil];
-    FRC.delegate = self;
+    _fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest managedObjectContext:self.dataController.managedObjectContext sectionNameKeyPath:sectionName cacheName:nil];
 
-    self.fetchedResultsController = FRC;
 	NSError *error = nil;
 	if (![self.fetchedResultsController performFetch:&error]) {
 	     // Replace this implementation with code to handle the error appropriately.
-	     // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development. 
 	    NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
-	    //abort();
 	}
     return _fetchedResultsController;
 }
 
+
+
+
+- (NSMutableArray *) createDataForPages {
+    NSMutableArray * dataForPages = [[NSMutableArray alloc]init];
+    NSError *error;
+    NSArray * arrayOfCategory;
+
+    if (self.categorySelected) {
+        arrayOfCategory = [NSArray arrayWithObject:self.categorySelected];
+    } else {
+
+        //Get the category in rank
+        NSFetchRequest *fetchRequestForCategory = [[NSFetchRequest alloc] init];
+        NSEntityDescription *entityForCategory = [NSEntityDescription entityForName:DEFINE_entity1 inManagedObjectContext:self.dataController.managedObjectContext];
+        [fetchRequestForCategory setEntity:entityForCategory];
+        NSSortDescriptor *rankDescriptor = [[NSSortDescriptor alloc] initWithKey:@"rank" ascending:YES];
+        [fetchRequestForCategory setSortDescriptors:@[rankDescriptor]];
+        NSFetchedResultsController *fetchedResultsControllerForCategory = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequestForCategory managedObjectContext:self.dataController.managedObjectContext sectionNameKeyPath:nil cacheName:nil];
+
+        if (![fetchedResultsControllerForCategory performFetch:&error]) {
+        NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+        }
+
+        arrayOfCategory = [fetchedResultsControllerForCategory fetchedObjects];
+    }
+
+
+    NSFetchRequest *fetchRequestForDrinks = [[NSFetchRequest alloc] init];
+    NSEntityDescription *entityForDrinks = [NSEntityDescription entityForName:DEFINE_entity2 inManagedObjectContext:self.dataController.managedObjectContext];
+    [fetchRequestForDrinks setEntity:entityForDrinks];
+
+    //for each category we select the drinks and add it to the mutable array
+    for (id object in arrayOfCategory){
+        CategoryDrink *categoryDrink;
+        if ([object isKindOfClass:[CategoryDrink class]]) {
+            categoryDrink = (CategoryDrink *)object;
+        } else categoryDrink = nil;
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(category = %@)",categoryDrink.label];
+        NSSortDescriptor *volumeDescriptor = [[NSSortDescriptor alloc] initWithKey: @"volume" ascending:YES];
+        NSSortDescriptor *priceDescriptor = [[NSSortDescriptor alloc] initWithKey:@"price" ascending:YES];
+        NSSortDescriptor *nameDescriptor = [[NSSortDescriptor alloc] initWithKey:@"name" ascending:YES];
+        [fetchRequestForDrinks setSortDescriptors:@[volumeDescriptor, priceDescriptor, nameDescriptor]];
+        [fetchRequestForDrinks setPredicate:predicate];
+
+        NSFetchedResultsController *fetchedResultsControllerForDrinks = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequestForDrinks managedObjectContext:self.dataController.managedObjectContext sectionNameKeyPath:nil cacheName:nil];
+        if (![fetchedResultsControllerForDrinks performFetch:&error])
+            NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+
+        for (Drink *drink in [fetchedResultsControllerForDrinks fetchedObjects]) {
+            NSDictionary *dictionary = @{@"object": drink, @"viewControllerId":DEFINE_drinkBottleViewControllerID};
+            [dataForPages addObject:dictionary];
+        }
+    }
+
+    return dataForPages;
+}
 
 //////////////////////////////////////////////////////////////////
 //SEGUE MANAGEMENT
@@ -376,11 +398,6 @@ NSString * const kSDSyncEngineSyncCompletedNotificationName1 = @"SDSyncEngineSyn
             case 1:
                 self.categorySelected =[[self fetchedResultsController] objectAtIndexPath:indexPath];
                 break;
-            case 2:
-                {
-                UITableViewCell *cell =(UITableViewCell *)sender;
-                self.containingSelected= cell.textLabel.text;
-                }
             default:
                 break;
 

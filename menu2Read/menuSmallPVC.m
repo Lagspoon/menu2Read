@@ -163,7 +163,6 @@ NSString * const kSDSyncEngineSyncCompletedNotificationName2 = @"SDSyncEngineSyn
 
 
 - (void)refresh {
-    NSLog(@"lauch the refresh");
     NSError *error = nil;
     if (![self.fetchedResultsController performFetch:&error]) {
         // Replace this implementation with code to handle the error appropriately.
@@ -174,7 +173,7 @@ NSString * const kSDSyncEngineSyncCompletedNotificationName2 = @"SDSyncEngineSyn
 
     self.modelController.dataForPages =[self createDataForPages];
     menuPageSmall *startingViewController = (menuPageSmall *)[self.modelController viewControllerAtIndex:0];
-    NSLog(@"reload starting view");
+
     //if startingViewController is empty it will crash
     if (startingViewController) {
         [self.pageViewController setViewControllers:@[startingViewController] direction:UIPageViewControllerNavigationDirectionForward animated:NO completion:nil];
